@@ -77,7 +77,7 @@ clicking on a shape in the sidebar will do one of the following:
 
 - Change the color of the corresponding shape on the map
 - Delete the corresponding shape on the map (be sure to remove it from the
-sidebar and the myRectanges array)
+sidebar and the myRectangles array)
 - Anything else you can think of!
 
 Task 7 (Stretch Goal): Reverse Task 6
@@ -90,7 +90,7 @@ Moving your mouse outside of the circle should remove the highlighting.
 
 // Global Variables
 var myRectangle;
-
+var myRectangles = [];
 // Initialize Leaflet Draw
 var drawControl = new L.Control.Draw({
   draw: {
@@ -110,4 +110,33 @@ map.on('draw:created', function (e) {
     var type = e.layerType; // The type of shape
     var layer = e.layer; // The Leaflet layer for the shape
     var id = L.stamp(layer); // The unique Leaflet ID for the layer
+    console.log(layer, type, id);
+    // if (myRectangle) { map.removeLayer(myRectangle) }
+    myRectangle = layer;
+    map.addLayer(myRectangle);
+    myRectangles.push(drawControl);
+
+    var jhtml = $.parseHTML(`<div class="shape" data-leaflet-id=${id}><h1>Current ID:${id}</h1></div>`);
+    $('#shapes').append(jhtml);
+
+    $(`div[data-leaflet-id|=${id}]`).click(function(e) {
+      const currentId = $(e.currentTarget).data('leaflet-id');
+
+      map.eachLayer(function (myLayer) {
+        if (L.stamp(myLayer) === currentId) {
+          map.removeLayer(myLayer);
+          $(e.currentTarget).remove()
+        }
+      });
+    });
+
+    // clickDelete = function(deletedShape) {
+    //   map.removeLayer(deletedShape);
+    // }
+    //
+    // // Delete shape on menu click
+    // $('.shape').click(function(e) {
+    //   const leafletId = $(e.target).data("leaflet-id")
+    //   map.removeLayer(deletedShape)
+    // });
 });
