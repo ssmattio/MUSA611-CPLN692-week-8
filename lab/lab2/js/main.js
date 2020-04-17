@@ -77,6 +77,7 @@ Again, the task is somewhat underspecified. Let's start with the simplest routin
 option available. Once you're getting a valid (as best you can tell) response
 from the server, move to the next task.
 
+https://api.mapbox.com/directions/v5/{profile}/{coordinates}/{api token}
 
 Task 3: Decode your route response
 
@@ -115,6 +116,11 @@ Task 6 (stretch): Refocus the map to roughly the bounding box of your route
 
 
 ===================== */
+map.on('style.load', function() {
+map.addSource("tom", {
+    "type": "geojson",
+    "data": route
+});
 
 var state = {
   position: {
@@ -171,4 +177,3 @@ $(document).ready(function() {
   });
 
 });
-
